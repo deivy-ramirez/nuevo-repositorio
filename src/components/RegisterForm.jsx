@@ -28,7 +28,7 @@ export default function RegisterForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-          Username
+          Nombre
         </label>
         <input
           type="text"
@@ -41,7 +41,7 @@ export default function RegisterForm() {
       </div>
       <div>
         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          Password
+          Contraseña
         </label>
         <input
           type="password"
@@ -54,7 +54,7 @@ export default function RegisterForm() {
       </div>
       <div>
         <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">
-          Date of Birth
+          Fecha de nacimiento
         </label>
         <input
           type="date"
@@ -80,7 +80,7 @@ export default function RegisterForm() {
       </div>
       <div>
         <label htmlFor="city" className="block text-sm font-medium text-gray-700">
-          City
+          Ciudad
         </label>
         <input
           type="text"

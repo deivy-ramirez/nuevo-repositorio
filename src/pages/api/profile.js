@@ -18,9 +18,9 @@ export default async function handler(req, res) {
   try {
     const decoded = verifyToken(token)
     const client = await clientPromise
-    const db = client.db('mi-app-promociones')
+    const db = client.db('myFirstDatabase')
 
-    const user = await db.collection('usuarios').findOne({ _id: new ObjectId(decoded.userId) })
+    const user = await db.collection('users').findOne({ _id: new ObjectId(decoded.userId) })
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' })

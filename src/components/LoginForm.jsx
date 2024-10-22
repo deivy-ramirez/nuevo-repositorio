@@ -4,27 +4,41 @@ import { useRouter } from 'next/router'
 export default function LoginForm() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
   const router = useRouter()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    })
+    setError('')
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
 
-    if (response.ok) {
-      const { token } = await response.json()
-      localStorage.setItem('token', token)
-      router.push('/profile')
-    } else {
-      alert('Login failed')
+      if (response.ok) {
+        const { token } = await response.json()
+        localStorage.setItem('token', token)
+        console.log('Login exitoso, redirigiendo a /profile')
+        await router.push('/profile')
+      } else {
+        const errorData = await response.json()
+        setError(errorData.message || 'Error en el inicio de sesión')
+      }
+    } catch (error) {
+      console.error('Error en el inicio de sesión:', error)
+      setError('Ocurrió un error inesperado. Por favor, intenta de nuevo.')
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span className="block sm:inline">{error}</span>
+        </div>
+      )}
       <div>
         <label htmlFor="username" className="block text-sm font-medium text-gray-700">
           Nombre de usuario
@@ -55,7 +69,7 @@ export default function LoginForm() {
         type="submit"
         className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
-        Iniciar Sesión
+        Iniciar sesión
       </button>
     </form>
   )

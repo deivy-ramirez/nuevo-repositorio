@@ -14,5 +14,9 @@ export function createToken(payload) {
 }
 
 export function verifyToken(token) {
-  return verify(token, process.env.JWT_SECRET)
+  try {
+    return verify(token, process.env.JWT_SECRET)
+  } catch (error) {
+    throw new Error('Invalid token')
+  }
 }

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
@@ -30,14 +31,20 @@ export default function ProfilePage() {
       } catch (error) {
         console.error('Error fetching profile:', error)
         router.push('/login')
+      } finally {
+        setLoading(false)
       }
     }
 
     fetchProfile()
   }, [router])
 
-  if (!user) {
+  if (loading) {
     return <div>Cargando...</div>
+  }
+
+  if (!user) {
+    return <div>No se pudo cargar el perfil del usuario.</div>
   }
 
   return (

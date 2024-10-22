@@ -11,20 +11,20 @@ export default async function handler(req, res) {
   try {
     console.log('Iniciando proceso de login para:', username)
     const client = await clientPromise
-    const db = client.db('mi-app-promociones')
+    const db = client.db('myFirstDatabase')
 
-    console.log('Conexión a la base de datos mi-app-promociones establecida')
+    console.log('Conexión a la base de datos myFirstDatabase establecida')
     console.log('Verificando colecciones en la base de datos:')
     const collections = await db.listCollections().toArray()
     console.log('Colecciones encontradas:', collections.map(c => c.name))
 
-    if (!collections.some(c => c.name === 'usuarios')) {
+    if (!collections.some(c => c.name === 'users')) {
       console.error('La colección "usuarios" no existe en la base de datos')
       return res.status(500).json({ message: 'Error de configuración de la base de datos' })
     }
 
     console.log('Buscando usuario en la colección "usuarios"')
-    const user = await db.collection('usuarios').findOne({ username })
+    const user = await db.collection('users').findOne({ username })
 
     if (!user) {
       console.log('Usuario no encontrado:', username)

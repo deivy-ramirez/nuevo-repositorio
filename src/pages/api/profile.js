@@ -3,6 +3,8 @@ import { verifyToken } from '../../lib/auth'
 import { ObjectId } from 'mongodb'
 
 export default async function handler(req, res) {
+  console.log('API route /api/profile called')
+
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' })
   }

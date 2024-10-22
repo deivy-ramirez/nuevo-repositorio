@@ -4,17 +4,20 @@ import { useRouter } from 'next/router'
 export default function ProfilePage() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const router = useRouter()
 
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem('token')
       if (!token) {
+        console.log('No token found, redirecting to login')
         router.push('/login')
         return
       }
 
       try {
+        console.log('Fetching profile data')
         const response = await fetch('/api/profile', {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -23,14 +26,21 @@ export default function ProfilePage() {
 
         if (response.ok) {
           const userData = await response.json()
+          console.log('Profile data received:', userData)
           setUser(userData)
         } else {
-          // Si hay un error (por ejemplo, token inválido), redirigir al login
-          router.push('/login')
+          console.error('Error response:', response.status, response.statusText)
+          const errorData = await response.json().catch(() => ({}))
+          console.error('Error data:', errorData)
+          setError(`Error: ${response.status} ${response.statusText}`)
+          if (response.status === 401) {
+            console.log('Unauthorized, redirecting to login')
+            router.push('/login')
+          }
         }
       } catch (error) {
         console.error('Error fetching profile:', error)
-        router.push('/login')
+        setError(`Error fetching profile: ${error.message}`)
       } finally {
         setLoading(false)
       }
@@ -41,6 +51,10 @@ export default function ProfilePage() {
 
   if (loading) {
     return <div>Cargando...</div>
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>
   }
 
   if (!user) {

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import ProfileView from '../components/ProfileView'
 
-export default function ProfilePage() {
+export default function ProfileView() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
